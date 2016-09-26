@@ -45,12 +45,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
-
-       // MyJavaJoke myJavaJoke = new MyJavaJoke();
-      //  myJavaJoke.returnJoke();
-
-      //  Toast.makeText(this, myJavaJoke.returnJoke(), Toast.LENGTH_SHORT).show();
-        new JokeProcessor().execute(new Pair<Context, String>(this, "Manfred"));
+        
+        new JokeProcessor().execute(new Pair<Context, String>(this, ""));
     }
 
     public void launchJokeActivity(View view){

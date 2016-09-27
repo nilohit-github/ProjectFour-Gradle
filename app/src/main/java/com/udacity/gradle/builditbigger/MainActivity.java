@@ -1,10 +1,8 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +11,7 @@ import com.appguru.android.myandroidjoke.MainJoke;
 import com.example.MyJavaJoke;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity  implements JokeProcessor.AsyncResponse{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +43,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
-        
-        new JokeProcessor().execute(new Pair<Context, String>(this, ""));
+
+        new JokeProcessor(this).execute();
     }
+
+    //this override the implemented method from AsyncResponse
+    @Override
+    public void processFinish(String output){
+
+        Intent intent = new Intent(this, MainJoke.class);
+        // MyJavaJoke myJavaJoke = new MyJavaJoke();
+
+        intent.putExtra(MainJoke.JOKE_KEY, output);
+        startActivity(intent);
+        //Here you will receive the result fired from async class
+        //of onPostExecute(result) method.
+    }
+
 
     public void launchJokeActivity(View view){
         Intent intent = new Intent(this, MainJoke.class);

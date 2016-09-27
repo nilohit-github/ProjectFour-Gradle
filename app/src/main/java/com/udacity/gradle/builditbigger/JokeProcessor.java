@@ -1,11 +1,8 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Pair;
 
-import com.appguru.android.myandroidjoke.MainJoke;
 import com.example.jhani.myapplication.backend.myApi.MyApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -18,14 +15,24 @@ import java.io.IOException;
  * Created by jhani on 9/25/2016.
  */
 
-public class JokeProcessor extends AsyncTask<Pair<Context, String>, Void, String>  {
+public class JokeProcessor extends AsyncTask<Void, Void, String>  {
 
 
         private static MyApi myApiService = null;
         private Context context;
 
+    // you may separate this or combined to caller class.
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+    public JokeProcessor(AsyncResponse delegate){
+        this.delegate = delegate;
+    }
+
+    public AsyncResponse delegate = null;
+
         @Override
-        protected String doInBackground(Pair<Context, String>... params) {
+        protected String doInBackground(Void... voids) {
             if(myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
@@ -44,7 +51,7 @@ public class JokeProcessor extends AsyncTask<Pair<Context, String>, Void, String
                 myApiService = builder.build();
             }
 
-            context = params[0].first;
+           // context = params[0].first;
 
 
             try {
@@ -54,14 +61,16 @@ public class JokeProcessor extends AsyncTask<Pair<Context, String>, Void, String
             }
         }
 
-        @Override
+
+    @Override
         protected void onPostExecute(String result) {
            // Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, MainJoke.class);
+            delegate.processFinish(result);
+            //Intent intent = new Intent(context, MainJoke.class);
            // MyJavaJoke myJavaJoke = new MyJavaJoke();
 
-            intent.putExtra(MainJoke.JOKE_KEY, result);
-            context.startActivity(intent);
+            //intent.putExtra(MainJoke.JOKE_KEY, result);
+            //context.startActivity(intent);
         }
     }
 

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.appguru.android.myandroidjoke.MainJoke;
-import com.example.MyJavaJoke;
 
 
 public class MainActivity extends ActionBarActivity  implements JokeProcessor.AsyncResponse{
@@ -61,13 +60,7 @@ public class MainActivity extends ActionBarActivity  implements JokeProcessor.As
     }
 
 
-    public void launchJokeActivity(View view){
-        Intent intent = new Intent(this, MainJoke.class);
-        MyJavaJoke myJavaJoke = new MyJavaJoke();
 
-        intent.putExtra(MainJoke.JOKE_KEY, myJavaJoke.returnJoke());
-        startActivity(intent);
-    }
 
 
 
